@@ -6,7 +6,7 @@
 using namespace std;
 
 class TrieNode {
-    public:
+public:
     unordered_map<char, TrieNode*> children;
     bool isEndOfWord;
     string meaning;
@@ -68,31 +68,6 @@ public:
         return "Word not found!";
     }
 
-    void autocompleteHelper(TrieNode* node, string prefix, vector<string>& suggestions) {
-        if (node->isEndOfWord) {
-            suggestions.push_back(prefix);
-        }
-
-        for (const auto& pair : node->children) {
-            autocompleteHelper(pair.second, prefix + pair.first, suggestions);
-        }
-    }
-
-    vector<string> autocomplete(const string& prefix) {
-        TrieNode* current = root;
-        vector<string> suggestions;
-
-        for (char c : prefix) {
-            if (current->children.find(c) == current->children.end()) {
-                return suggestions;
-            }
-            current = current->children[c];
-        }
-
-        autocompleteHelper(current, prefix, suggestions);
-        return suggestions;
-    }
-
     void remove(const string& word) {
         TrieNode* current = root;
         for (char c : word) {
@@ -138,16 +113,15 @@ const char *longString = R""""(
 
 void displayMenu() {
 
-    cout<<longString<<endl;
+    cout << longString << endl;
 
     cout << "===== MENU =====" << endl;
     cout << "1. Add word" << endl;
     cout << "2. Remove word" << endl;
     cout << "3. Search word" << endl;
-    cout << "4. Autocomplete suggestions" << endl;
-    cout << "5. Show dictionary" << endl;
-    cout << "6. Clear dictionary" << endl;
-    cout << "7. Exit" << endl;
+    cout << "4. Show dictionary" << endl;
+    cout << "5. Clear dictionary" << endl;
+    cout << "6. Exit" << endl;
     cout << "================" << endl;
 }
 
@@ -174,7 +148,6 @@ int main() {
 
     int choice;
     string word, meaning;
-    string prefix;
     while (true) {
         displayMenu();
         cout << "Enter your choice: ";
@@ -205,27 +178,15 @@ int main() {
                 break;
 
             case 4:
-                cout << "Enter the prefix: ";
-                cin >> prefix;
-                cout << "Autocomplete suggestions:" << endl;
-                {
-                    vector<string> suggestions = dictionary.autocomplete(prefix);
-                    for (const string& suggestion : suggestions) {
-                        cout << suggestion << endl;
-                    }
-                }
-                break;
-
-            case 5:
                 showDictionarySorted(dictionary);
                 break;
 
-            case 6:
+            case 5:
                 dictionary.clear();
                 cout << "Dictionary cleared successfully!" << endl;
                 break;
 
-            case 7:
+            case 6:
                 cout << "Exiting program. Goodbye!" << endl;
                 return 0;
 
